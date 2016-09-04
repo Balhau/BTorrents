@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "BTorrent",
+  "description": "Balhau Torrent chrome extension",
+  "version": "1.0.1",
+
+  "options_page": "options.html",
+
+  "browser_action": {
+    "default_icon": "bittorrentx200.png",
+    "default_popup": "popup.html",
+    "default_title" : "Balhau torrent downloader"
+  },
+  "icons": {
+          "16": "bittorrentx200.png",
+          "48": "bittorrentx200.png",
+          "128": "bittorrentx200.png"
+  },
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/",
+    "http://webpt.balhau.net/",
+    "storage"
+  ]
+}
