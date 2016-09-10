@@ -1,3 +1,7 @@
+/**
+This is a javascript API for the Transmission Daemon REST service. This will give a bunch of methods you can use to call transmission daemon.
+
+*/
 var TransmissionClient=function(host,user,pass){
   this.user=user;
   this.pass=pass;
@@ -41,6 +45,10 @@ var TransmissionClient=function(host,user,pass){
 
 TransmissionClient.prototype.getSession=function(){
   postMessage({"method":"session-get"});
+};
+
+TransmissionClient.prototype.getStats=function(){
+  postMessage({ "method" : "session-stats" });
 };
 
 TransmissionClient.prototype.getTorrents=function(){
