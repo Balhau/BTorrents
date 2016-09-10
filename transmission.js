@@ -1,7 +1,12 @@
-var TransmissionClient=function(user,pass){
+var TransmissionClient=function(host,user,pass){
   this.user=user;
   this.pass=pass;
+  this.endpoint=host;
   this.sessionToken="sessionToken";
+
+  var rpc=function(){
+    return "http://"+endpoint+"/transmission/rpc";
+  }
 
   var getAuthToken=function(user,pass){
     return "Basic "+btoa(user+":"+name);
@@ -14,7 +19,7 @@ var TransmissionClient=function(user,pass){
   var postMessage=function(pdata){
     var authToken = getAuthToken(user,pass)
     $.ajax({
-      url: "http://balhau.net:9091/transmission/rpc",
+      url: rpc(),
       headers:{
         'Authorization' : authToken,
         'Content-Type':'application/json; charset=UTF-8',
@@ -31,8 +36,8 @@ var TransmissionClient=function(user,pass){
       }
     });
   };
-
 }
+
 
 TransmissionClient.prototype.getSession=function(){
   postMessage({"method":"session-get"});
