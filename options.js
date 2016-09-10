@@ -1,26 +1,26 @@
 //Execute after DOM loaded
 
 document.addEventListener('DOMContentLoaded', function() {
-  syncLocalData(function(url){
 
-    var btnTestCredentials  = document.getElementById('btnTestCredentials');
-    var btnSaveOptions      = document.getElementById('btnSaveOptions');
-    var txtPatternValue     = document.getElementById('txtPatternValue');
-    var txtCurrValue        = document.getElementById('txtCurrValue');
+  var btnTestCredentials  = document.getElementById('btnTestCredentials');
+  var btnSaveOptions      = document.getElementById('btnSaveOptions');
+  var txtApiEndpoint      = document.getElementById('apiEndpoint');
+  var txtUser             = document.getElementById('user');
+  var txtPassword         = document.getElementById('password');
 
-    txtCurrValue.innerText=url;
-
-    txtPatternValue.value=url;
-
-    btnTestCredentials.addEventListener('click',function(){
-      //saveURLLocalStore(txtPatternValue.value);
-      //txtCurrValue.innerText=txtPatternValue.value;
-      alert("Testing credentials")
-    });
-
-    btnSaveOptions.addEventListener('click',function()){
-      alert("Saving options")
-    }
-
+  btnTestCredentials.addEventListener('click',function(){
+    //saveURLLocalStore(txtPatternValue.value);
+    //txtCurrValue.innerText=txtPatternValue.value;
+    alert("Testing credentials");
   });
-})
+
+  btnSaveOptions.addEventListener('click',function(){
+    alert("Saving options");
+  });
+
+  syncLocalData(function(url,user_name,user_pass){
+    txtApiEndpoint.value = url;
+    txtUser.value = user_name;
+    txtPassword.value = user_pass;
+  });
+});
