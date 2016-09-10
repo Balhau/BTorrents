@@ -12,7 +12,7 @@ var TransmissionClient=function(user,pass){
   };
 
   var postMessage=function(pdata){
-    var authToken = getAuthToken("pi","gamma007")
+    var authToken = getAuthToken(user,pass)
     $.ajax({
       url: "http://balhau.net:9091/transmission/rpc",
       headers:{
