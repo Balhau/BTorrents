@@ -12,14 +12,18 @@ $(document).ready(function() {
         link.onclick=function(){
           var l=this.href;
           this.href="#";
-          tClient.addTorrent(l,
-          function(){
-            alert("Torrent added successfully");
-          },
-          function(){
-            alert("Error while downloading torrent");
-          }
-        )
+          var validLink = l.split(".torrent").length != 1;
+          console.log(l.split(".torrent"));
+          if(validLink){
+            tClient.addTorrent(l,
+            function(){
+                alert("Torrent added successfully");
+            },
+            function(){
+              alert("Error while downloading torrent");
+            }
+          )
+        }
       };
     });
   });
