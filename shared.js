@@ -9,6 +9,7 @@ var api_url="balhau.net:9091";
 var user_name="user";
 var user_pass="password";
 var sessionToken = null;
+var tClient = null;
 
 //Default urls Pattern
 /*var downloadPatterns=[
@@ -99,4 +100,27 @@ var clearLocalData=function(){
     console.log("Localdata Cleared");
   });
   syncLocalData();
+};
+
+
+var TorrentUtils = {}
+
+/**
+* This will convert integer space to string space representation
+*/
+TorrentUtils.intToSpace = function(space){
+  var sspace=space;
+  var div = 1024;
+  if(sspace < div) return sspace+"B";
+  sspace = sspace/div;
+  if(sspace < div) return sspace.toFixed(2)+"Kb";
+  sspace = sspace/div;
+  if(sspace < div) return sspace.toFixed(2)+"Mb";
+  sspace = sspace/div;
+  if(sspace < div) return sspace.toFixed(2)+"Gb";
+  sspace = sspace/div;
+  if(sspace < div) return sspace.toFixed(2)+"Tb";
+  sspace = sspace/div;
+  if(sspace < div) return sspace.toFixed(2)+"Pb";
+  return -1
 };

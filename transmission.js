@@ -2,11 +2,11 @@
 This is a javascript API for the Transmission Daemon REST service. This will give a bunch of methods you can use to call transmission daemon.
 
 */
-var TransmissionClient=function(host,user,pass){
+var TransmissionClient=function(host,user,pass,token){
   this.user=user;
   this.pass=pass;
   this.endpoint=host;
-  this.sessionToken=null;
+  this.sessionToken=token;
 
   var uber = this;
 
@@ -21,12 +21,12 @@ var TransmissionClient=function(host,user,pass){
 
 
   var rpc=function(){
-    return "http://"+uber.endpoint+"/transmission/rpc";
+    return uber.endpoint+"/transmission/rpc";
   };
 
-  var callFunction=function(f){
+  var callFunction=function(f,args){
     if(typeof f === 'function'){
-      f();
+      f(args);
     }
   };
 
@@ -35,7 +35,7 @@ var TransmissionClient=function(host,user,pass){
   };
 
   var postMessageData = function(pdata,onSuccess,onError){
-    var authToken = getAuthToken(transmission.user,transmission.pass);
+    var authToken = getAuthToken(uber.user,uber.pass);
 
     console.log(uber)
 
@@ -52,13 +52,13 @@ var TransmissionClient=function(host,user,pass){
       type:"POST",
       success:function(data){
         console.log(data);
-        callFunction(onSuccess);
+        callFunction(onSuccess,data);
       },
       error:function(xhr, textStatus, errorThrown){
         console.log(uber);
         uber.sessionToken=parseSessionToken(xhr.responseText);
         if(uber.sessionToken==null){
-          callFunction(onError);
+          callFunction(onError,xhr);
         }
         alert("Acquired session token, click again to proceed with operations");
         console.log("Retrieved session-token: "+uber.sessionToken);
@@ -92,5 +92,15 @@ var TransmissionClient=function(host,user,pass){
     );
   }
 
-  var transmission = this;
+  this.addTorrent=function(torrentlink,onSuccess,onError){
+    postMessageData({
+      "method":"torrent-add",
+        "arguments": {
+          "paused":false,
+          "filename": torrentlink
+        }
+      }
+    ,onSuccess,onError);
+  };
+
 };

@@ -1,5 +1,4 @@
 //Execute after DOM loaded
-
 document.addEventListener('DOMContentLoaded', function() {
 
   var btnTestCredentials  = document.getElementById('btnTestCredentials');
@@ -8,21 +7,19 @@ document.addEventListener('DOMContentLoaded', function() {
   var txtUser             = document.getElementById('user');
   var txtPassword         = document.getElementById('password');
 
-    var tClient = null;
-
   var sync=function(){
     syncLocalData(function(url,user_name,user_pass,stoken){
       txtApiEndpoint.value = url;
       txtUser.value = user_name;
       txtPassword.value = user_pass;
       sessionToken=stoken;
+      console.log(tClient);;
       tClient = new TransmissionClient(txtApiEndpoint.value,txtUser.value,txtPassword.value);
       tClient.sessionToken = sessionToken
     });
   };
 
   sync();
-
 
   var updateTransmission=function(){
     tClient.user=txtUser.value;
