@@ -8,10 +8,28 @@ document.addEventListener('DOMContentLoaded', function() {
   var txtUser             = document.getElementById('user');
   var txtPassword         = document.getElementById('password');
 
+  var tClient = new TransmissionClient(txtApiEndpoint.value,txtUser.value,txtPassword.value);
+
+  var updateTransmission=function(){
+    tClient.user=txtUser.value;
+    tClient.pass=txtPassword.value;
+    tClient.endpoint = txtApiEndpoint.value;
+  }
+
   btnTestCredentials.addEventListener('click',function(){
+    updateTransmission()
     //saveURLLocalStore(txtPatternValue.value);
-    //txtCurrValue.innerText=txtPatternValue.value;
-    alert("Testing credentials");
+    //txtCurrValue.innerTexalert("Testing credentials": + txtUser.value + "," + txtPassword.value);t=txtPatternValue.value;
+    //alert("Testing credentials: " + txtUser.value + "," + txtPassword.value);
+    tClient.getSession(
+      function(){
+        alert("Autentication Succeded");
+      },
+      function(){
+        alert("Autentication Failed");
+      }
+    );
+
   });
 
   btnSaveOptions.addEventListener('click',function(){

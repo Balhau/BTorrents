@@ -4,9 +4,9 @@ var API_KEY="API";
 
 //Default values
 var service_url="http://webpt.balhau.net";
-var api_url="rasp.daemon.com";
-var user_name="username";
-var user_pass="user_password";
+var api_url="balhau.net:9091";
+var user_name="pi";
+var user_pass="gamma007";
 var sessionToken = null;
 
 //Default urls Pattern

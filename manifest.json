@@ -21,7 +21,7 @@
     "activeTab",
     "https://ajax.googleapis.com/",
     "http://webpt.balhau.net/",
-    "http://balhau.net/",
+    "http://balhau.net:9091/",
     "storage"
   ]
 }
