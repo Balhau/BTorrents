@@ -1,12 +1,13 @@
 var USER_NAME_KEY ="USER_NAME";
 var USER_PASS_KEY="PASSWORD";
+var SESSION_TOKEN_KEY = "SESSION_TOKEN_KEY"
 var API_KEY="API";
 
 //Default values
 var service_url="http://webpt.balhau.net";
 var api_url="balhau.net:9091";
-var user_name="pi";
-var user_pass="gamma007";
+var user_name="user";
+var user_pass="password";
 var sessionToken = null;
 
 //Default urls Pattern
@@ -29,39 +30,6 @@ var api={
 //Callback to execute after the processing is done
 //localvariables
 
-//Basic http auth
-var getAuthToken = function(user,name){
-  return "Basic "+btoa(user+":"+name);
-}
-
-
-//This method will parse the error message and retrieve the sessionToken value
-var parseSessionToken = function(errorMessage){
-  return errorMessage.split("X-Transmission-Session-Id")[2].split(":")[1].trim().split("</code>")[0]
-}
-
-var postMessage=function(pdata){
-  var authToken = getAuthToken("pi","gamma007")
-  $.ajax({
-    url: "http://balhau.net:9091/transmission/rpc",
-    headers:{
-      'Authorization' : authToken,
-      'Content-Type':'application/json; charset=UTF-8',
-      'X-Transmission-Session-Id' : sessionToken,
-    },
-    data: JSON.stringify(pdata),
-    type:"POST",
-    success:function(data){
-      console.log(data);
-    },
-    error:function(xhr, textStatus, errorThrown){
-      sessionToken=parseSessionToken(xhr.responseText);
-      console.log("Retrieved session-token: "+sessionToken);
-    }
-  });
-}
-
-
 var syncLocalData=function(callback){
 
     chrome.storage.local.get(API_KEY,function(data){
@@ -70,8 +38,8 @@ var syncLocalData=function(callback){
         console.log("Load api_url from localstore: "+data[API_KEY]);
         api_url = data[API_KEY]
       }
-      saveLocalStore(api_url,user_name,user_pass);
-      callback(api_url,user_name,user_pass);
+      saveLocalStore(api_url,user_name,user_pass,sessionToken);
+      callback(api_url,user_name,user_pass,sessionToken);
     });
 
   chrome.storage.local.get(USER_NAME_KEY,function(data){
@@ -80,8 +48,8 @@ var syncLocalData=function(callback){
       console.log("Load api_url from localstore: "+data[USER_NAME_KEY]);
       user_name = data[USER_NAME_KEY]
     }
-    saveLocalStore(api_url,user_name,user_pass);
-    callback(api_url,user_name,user_pass);
+    saveLocalStore(api_url,user_name,user_pass,sessionToken);
+    callback(api_url,user_name,user_pass,sessionToken);
   });
 
   chrome.storage.local.get(USER_PASS_KEY,function(data){
@@ -90,23 +58,38 @@ var syncLocalData=function(callback){
       console.log("Load api_url from localstore: "+data[USER_PASS_KEY]);
       user_pass = data[USER_PASS_KEY]
     }
-    saveLocalStore(api_url,user_name,user_pass);
-    callback(api_url,user_name,user_pass);
+    saveLocalStore(api_url,user_name,user_pass,sessionToken);
+    callback(api_url,user_name,user_pass,sessionToken);
+  });
+
+  chrome.storage.local.get(SESSION_TOKEN_KEY,function(data){
+    if(data[SESSION_TOKEN_KEY]){
+      //Load variables into localstore
+      console.log("Load api_url from localstore: "+data[SESSION_TOKEN_KEY]);
+      sessionToken = data[SESSION_TOKEN_KEY]
+    }
+    saveLocalStore(api_url,user_name,user_pass,sessionToken);
+    callback(api_url,user_name,user_pass,sessionToken);
   });
 
 };
 
 
 
-var saveLocalStore=function(url,user,pass){
+var saveLocalStore=function(url,user,pass,stoken){
   var sdata={};
   sdata[API_KEY] = url;
   sdata[USER_NAME_KEY]=user;
   sdata[USER_PASS_KEY]=pass;
+  sdata[SESSION_TOKEN_KEY]=stoken
+
   chrome.storage.local.set(
     sdata,
     function(){
-      console.log("Stored context data into localstore:")
+      console.log("************************************");
+      console.log("Stored context data into localstore:");
+      console.log(sdata);
+      console.log("************************************");
     }
   )
 };

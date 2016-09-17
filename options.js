@@ -8,7 +8,21 @@ document.addEventListener('DOMContentLoaded', function() {
   var txtUser             = document.getElementById('user');
   var txtPassword         = document.getElementById('password');
 
-  var tClient = new TransmissionClient(txtApiEndpoint.value,txtUser.value,txtPassword.value);
+    var tClient = null;
+
+  var sync=function(){
+    syncLocalData(function(url,user_name,user_pass,stoken){
+      txtApiEndpoint.value = url;
+      txtUser.value = user_name;
+      txtPassword.value = user_pass;
+      sessionToken=stoken;
+      tClient = new TransmissionClient(txtApiEndpoint.value,txtUser.value,txtPassword.value);
+      tClient.sessionToken = sessionToken
+    });
+  };
+
+  sync();
+
 
   var updateTransmission=function(){
     tClient.user=txtUser.value;
@@ -33,12 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   btnSaveOptions.addEventListener('click',function(){
-    alert("Saving options");
-  });
-
-  syncLocalData(function(url,user_name,user_pass){
-    txtApiEndpoint.value = url;
-    txtUser.value = user_name;
-    txtPassword.value = user_pass;
+    saveLocalStore(txtApiEndpoint.value,txtUser.value,txtPassword.value,tClient.sessionToken);
   });
 });
