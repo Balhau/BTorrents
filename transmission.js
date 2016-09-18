@@ -1,6 +1,6 @@
 /**
 This is a javascript API for the Transmission Daemon REST service. This will give a bunch of methods you can use to call transmission daemon.
-
+This needs the inclusion of utils.js
 */
 var TransmissionClient=function(host,user,pass,token){
   this.user=user;
@@ -34,52 +34,20 @@ var TransmissionClient=function(host,user,pass,token){
     return "Basic "+btoa(user+":"+pass);
   };
 
-  var postMessageData = function(pdata,onSuccess,onError){
-    var authToken = getAuthToken(uber.user,uber.pass);
-
-    console.log(uber)
-
-    var headers = {
-      'Authorization' : authToken,
-      'Content-Type':'application/json; charset=UTF-8',
-      'X-Transmission-Session-Id' : uber.sessionToken,
-    };
-
-    $.ajax({
-      url: rpc(),
-      headers: headers,
-      data: JSON.stringify(pdata),
-      type:"POST",
-      success:function(data){
-        console.log(data);
-        callFunction(onSuccess,data);
-      },
-      error:function(xhr, textStatus, errorThrown){
-        console.log(uber);
-        uber.sessionToken=parseSessionToken(xhr.responseText);
-        if(uber.sessionToken==null){
-          callFunction(onError,xhr);
-        }
-        alert("Acquired session token, click again to proceed with operations");
-        console.log("Retrieved session-token: "+uber.sessionToken);
-      }
-    });
-  };
-
   this.getSession=function(onSuccess,onError){
-    postMessageData({"method":"session-get"},
+    Util.http("POST",{"method":"session-get"},
       onSuccess,
       onError
     );
   };
 
   this.getStats=function(onSuccess,onError){
-    postMessageData({ "method" : "session-stats" },
+    Util.http("POST",{ "method" : "session-stats" },
     onSuccess,onError);
   };
 
   this.getTorrents=function(onSuccess,onError){
-    postMessageData({ "method" : "torrent-get",
+    Util.http("POST",{ "method" : "torrent-get",
                   "arguments" : {
                     "fields" : [
                       "id", "name", "status", "errorString", "announceResponse", "recheckProgress", "sizeWhenDone",
@@ -93,7 +61,7 @@ var TransmissionClient=function(host,user,pass,token){
   }
 
   this.addTorrent=function(torrentlink,onSuccess,onError){
-    postMessageData({
+    Util.http("POST",{
       "method":"torrent-add",
         "arguments": {
           "paused":false,
