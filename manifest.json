@@ -27,7 +27,7 @@
   "permissions": [
     "activeTab",
     "https://ajax.googleapis.com/",
-    "http://webpt.balhau.net/",
+    "https://webpt.balhau.net/",
     "https://transmission.balhau.net",
     "storage"
   ]

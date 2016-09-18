@@ -4,7 +4,7 @@ var SESSION_TOKEN_KEY = "SESSION_TOKEN_KEY"
 var API_KEY="API";
 
 //Default values
-var service_url="http://webpt.balhau.net";
+var service_url="https://webpt.balhau.net";
 var api_url="balhau.net:9091";
 var user_name="user";
 var user_pass="password";

@@ -6,6 +6,12 @@ button.action{
     cursor: pointer;
 }
 
+.torrentInfo{
+  margin-top: 5px;
+  background-color: #F0F0F0;
+  padding: 5px;
+}
+
 body{
   background: #663399;
   color: white;

@@ -17,6 +17,19 @@ WebPT.PirateBay.TorrentInfo = function(name,magnetLink,torrentLink,date,seeders,
 };
 
 
-WebPT.Piratebay.API=function(host){
+
+WebPT.PirateBay.API=function(host){
   this.host=host;
+};
+
+WebPT.PirateBay.API.prototype.searchTorrents = function(query,page,onSuccess,onError){
+  Util.http(
+    this.host+"/ws/piratebay/torrents","PUT",{
+      "query" : query,
+      "page"  : page,
+      "order" : "99",
+    },{
+      "Content-Type" : "application/json"
+    },onSuccess,onError
+  );
 };
