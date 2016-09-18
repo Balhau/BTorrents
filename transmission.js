@@ -24,30 +24,57 @@ var TransmissionClient=function(host,user,pass,token){
     return uber.endpoint+"/transmission/rpc";
   };
 
-  var callFunction=function(f,args){
-    if(typeof f === 'function'){
-      f(args);
-    }
-  };
-
   var getAuthToken=function(user,pass){
     return "Basic "+btoa(user+":"+pass);
   };
 
+  var post=function(data,onSuccess,onError){
+    var authToken = getAuthToken(uber.user,uber.pass);
+
+    console.log(uber)
+
+    var headers = {
+      'Authorization' : authToken,
+      'Content-Type':'application/json; charset=UTF-8',
+      'X-Transmission-Session-Id' : uber.sessionToken,
+    };
+
+    var onSuccessW = function(data){
+      console.log(data);
+      Util.call(onSuccess,data);
+    };
+
+    var onErrorW = function(xhr, textStatus, errorThrown){
+      console.log(uber);
+      uber.sessionToken=parseSessionToken(xhr.responseText);
+      if(uber.sessionToken==null){
+        Util.call(onError,xhr);
+      }
+      alert("Acquired session token, click again to proceed with operations");
+      console.log("Retrieved session-token: "+uber.sessionToken);
+    };
+
+    Util.http(
+      rpc(),"POST",data,headers,onSuccessW,onErrorW
+    );
+  };
+
   this.getSession=function(onSuccess,onError){
-    Util.http("POST",{"method":"session-get"},
+    post({"method":"session-get"},
       onSuccess,
       onError
     );
   };
 
   this.getStats=function(onSuccess,onError){
-    Util.http("POST",{ "method" : "session-stats" },
-    onSuccess,onError);
+    post({ "method" : "session-stats" },
+      onSuccess,
+      onError
+    );
   };
 
   this.getTorrents=function(onSuccess,onError){
-    Util.http("POST",{ "method" : "torrent-get",
+    post({ "method" : "torrent-get",
                   "arguments" : {
                     "fields" : [
                       "id", "name", "status", "errorString", "announceResponse", "recheckProgress", "sizeWhenDone",
@@ -56,12 +83,13 @@ var TransmissionClient=function(host,user,pass,token){
                     ]
                   }
                 },
-                onSuccess,onError
+                onSuccess,
+                onError
     );
   }
 
   this.addTorrent=function(torrentlink,onSuccess,onError){
-    Util.http("POST",{
+    post({
       "method":"torrent-add",
         "arguments": {
           "paused":false,
