@@ -20,7 +20,7 @@
   "content_scripts" : [
     {
       "css" : [],
-      "js" : ["jquery.js","transmission.js","shared.js","yts-injector.js"],
+      "js" : ["jquery.js","utils.js","transmission.js","shared.js","yts-injector.js"],
       "matches" : ["https://yts.ag/movie/*"]
     }
   ],
