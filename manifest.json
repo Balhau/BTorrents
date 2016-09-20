@@ -28,8 +28,7 @@
     "activeTab",
     "https://ajax.googleapis.com/",
     "https://webpt.balhau.net/",
-    "https://transmission.balhau.net",
+    "https://transmission.balhau.net/",
     "storage"
-  ],
-  "content_security_policy":"script-src 'self'  'unsafe-inline' 'unsafe eval' object-src 'self'"
+  ]
 }

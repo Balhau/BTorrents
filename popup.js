@@ -3,6 +3,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var tClient = null;
 
+  var txtSearch       = document.getElementById('txtSearch');
+  var btnSearch       = document.getElementById('btnSearch');
+  var divResults      = document.getElementById('divResults');
+  var chkDisplayYTS   = document.getElementById('displayYTS');
+  var btnYtsPrevious  = document.getElementById('ytsPrevious');
+  var btnYtsNext      = document.getElementById('ytsNext');
+  var divYts          = document.getElementById('divYts');
+
   syncLocalData(function(url,user,pass,token){
     tClient = new TransmissionClient(url,user,pass,pass,token);
   });
@@ -13,6 +21,21 @@ document.addEventListener('DOMContentLoaded', function() {
       function(){alert("Error while sending torrent");}
     )
   };
+
+  var loadYTSContent = function(page){
+    
+  };
+
+  var toggleYTS = function(){
+    chkDisplayYTS.checked = !chkDisplayYTS.checked;
+    btnYtsPrevious.disabled = !chkDisplayYTS.checked;
+    btnYtsNext.disabled = !chkDisplayYTS.checked;
+    if(chkDisplayYTS.checked === true){
+
+    }else{
+      divYts.innerHTML="";
+    }
+  }
 
   var renderResults = function(result,number){
     var renderHtml = "";
@@ -46,10 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var renderError = function(xhr){
       divResults.innerHTML="Error while retrieving data"
   };
-
-  var txtSearch   = document.getElementById('txtSearch');
-  var btnSearch   = document.getElementById('btnSearch');
-  var divResults  = document.getElementById('divResults');
 
   btnSearch.addEventListener('click',function(){
     var pb=new WebPT.PirateBay.API(service_url);

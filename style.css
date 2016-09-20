@@ -18,6 +18,10 @@ body{
   font-family: monospace;
 }
 
+.h1{
+  font-size: 2.5em;
+}
+
 div.table{
   width:100%;
   overflow: auto;
@@ -35,6 +39,14 @@ div.left{
   text-transform: uppercase;
   font-family: monospace;
   float: left;
+}
+
+.left{
+  float:left;
+}
+
+.down{
+  vertical-align: bottom;
 }
 
 div.right{
