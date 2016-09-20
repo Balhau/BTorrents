@@ -1,8 +1,6 @@
 //Event that run right after page DOM loaded
 document.addEventListener('DOMContentLoaded', function() {
 
-  var tClient = null;
-
   var txtSearch       = document.getElementById('txtSearch');
   var btnSearch       = document.getElementById('btnSearch');
   var divResults      = document.getElementById('divResults');
@@ -112,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   var render100 = function(result){
-    renderResults(result,100);
+    renderTorrentResults(result,100);
   }
 
   var renderError = function(xhr){

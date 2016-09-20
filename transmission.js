@@ -31,32 +31,42 @@ var TransmissionClient=function(host,user,pass,token){
   var post=function(data,onSuccess,onError){
     var authToken = getAuthToken(uber.user,uber.pass);
 
-    console.log(uber)
-
-    var headers = {
-      'Authorization' : authToken,
-      'Content-Type':'application/json; charset=UTF-8',
-      'X-Transmission-Session-Id' : uber.sessionToken,
+    var buildHeaders=function(aToken,sToken) {
+      return {
+        'Authorization' : aToken,
+        'Content-Type':'application/json; charset=UTF-8',
+        'X-Transmission-Session-Id' : sToken,
+      };
     };
 
     var onSuccessW = function(data){
-      console.log(data);
       Util.call(onSuccess,data);
     };
 
-    var onErrorW = function(xhr, textStatus, errorThrown){
-      console.log(uber);
-      uber.sessionToken=parseSessionToken(xhr.responseText);
-      if(uber.sessionToken==null){
-        Util.call(onError,xhr);
-      }
-      alert("Acquired session token, click again to proceed with operations");
-      console.log("Retrieved session-token: "+uber.sessionToken);
+    var onErrorBuilder = function(tryNumber){
+      return function(xhr, textStatus, errorThrown){
+        uber.sessionToken=parseSessionToken(xhr.responseText);
+        console.log("Not sessionToken, trying"+tryNumber);
+        if(tryNumber>0){
+          postWithRetry(tryNumber-1,buildHeaders(authToken,uber.sessionToken));
+          return;
+        }else{
+          Util.call(onError,xhr);
+          console.log("Retrieved session-token: "+uber.sessionToken);
+        }
+      };
     };
 
-    Util.http(
-      rpc(),"POST",data,headers,onSuccessW,onErrorW
-    );
+    var postWithRetry = function(numberRetry,headers){
+      var localOnError = onErrorBuilder(numberRetry);
+      if(numberRetry>0){
+        Util.http(
+          rpc(),"POST",data,headers,onSuccessW,localOnError
+        );
+      }
+    };
+
+    postWithRetry(3,buildHeaders(authToken,uber.sessionToken));
   };
 
   this.getSession=function(onSuccess,onError){

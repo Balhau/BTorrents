@@ -13,9 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
       txtUser.value = user_name;
       txtPassword.value = user_pass;
       sessionToken=stoken;
-      console.log(tClient);;
       tClient = new TransmissionClient(txtApiEndpoint.value,txtUser.value,txtPassword.value);
       tClient.sessionToken = sessionToken
+      console.log("TCLIENT");
+      console.log(tClient);
     });
   };
 
