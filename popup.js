@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var addTorrent=function(url){
     tClient.addTorrent(url,
-      function(){console.log("Added torrent: "+url);},
-      function(){console.log("Error while sending torrent");}
+      function(){alert("Added torrent:");},
+      function(){alert("Error while adding torrent");}
     )
   };
 
