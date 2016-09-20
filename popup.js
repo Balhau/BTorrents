@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var btnYtsNext      = document.getElementById('ytsNext');
   var divYts          = document.getElementById('divYts');
 
+  var ytsCurrPage     = 1;
+
   syncLocalData(function(url,user,pass,token){
     tClient = new TransmissionClient(url,user,pass,pass,token);
   });
@@ -23,21 +25,52 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   var loadYTSContent = function(page){
-    
+    var yts = new WebPT.YTS.API(service_url);
+    yts.getYTSPage(page,
+      function(data){
+        renderYTSResults(data,100);
+      },
+      function(){
+        console.log("Error");
+      }
+    )
   };
 
   var toggleYTS = function(){
-    chkDisplayYTS.checked = !chkDisplayYTS.checked;
     btnYtsPrevious.disabled = !chkDisplayYTS.checked;
     btnYtsNext.disabled = !chkDisplayYTS.checked;
     if(chkDisplayYTS.checked === true){
-
+      loadYTSContent(ytsCurrPage);
     }else{
       divYts.innerHTML="";
     }
   }
 
-  var renderResults = function(result,number){
+  chkDisplayYTS.onclick=toggleYTS;
+
+  var renderYTSResults = function(results,number){
+    var renderHtml = "";
+
+    results.message.slice(0,number).forEach(function(tinfo){
+      renderHtml += "<div class='left ytsInfo'>";
+      renderHtml += "<img class='thumbnail' src='"+tinfo.imageURL+"'></img>";
+      renderHtml += "<div class='name'>"+tinfo.description+"</div>";
+      renderHtml += "<p class='ytsDsc'>Rotten Tomatoes Critics: "+tinfo.rottenTomatoesCritics+"</p>";
+      renderHtml += "<p class='ytsDsc'>Rotten Tomatoes Audience: "+tinfo.getRottenTomatoesAudience+"</p>";
+      renderHtml += "<p class='ytsDsc'>IMDB: "+tinfo.imdb+"</p>";
+      renderHtml += "<p class='ytsDsc'>Likes: "+tinfo.likes+"</p>";
+      tinfo.torrentLinks.forEach(function(link){
+        renderHtml += "<p class='ytsDsc'><a href='#' data='"+btoa(link.url)+"'>"+link.description+"</a>";
+      });
+      renderHtml += "</div>";
+    });
+
+    divYts.innerHTML=renderHtml;
+
+    addEventToAnchors(divYts);
+  };
+
+  var renderTorrentResults = function(result,number){
     var renderHtml = "";
 
     result.message.slice(0,number).forEach(function(tinfo){
@@ -53,14 +86,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     divResults.innerHTML = renderHtml;
 
-    var aEl = divResults.getElementsByTagName('a');
+    addEventToAnchors(divResults);
+  };
+
+  var addEventToAnchors=function(parent){
+    var aEl = parent.getElementsByTagName('a');
     Array.from(aEl).forEach(function(el){
       var data = el.getAttribute("data");
       el.onclick = function(){
         addTorrent(atob(data));
       }
     });
-  };
+  }
 
   var render100 = function(result){
     renderResults(result,100);

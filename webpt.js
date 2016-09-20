@@ -4,6 +4,11 @@
 var WebPT = {};
 
 WebPT.PirateBay = {};
+WebPT.YTS = {};
+
+WebPT.DEFAULT_HTTP_HEADERS={
+  "Content-Type" : "application/json"
+};
 
 /**
 * TorrentInfo information
@@ -28,8 +33,18 @@ WebPT.PirateBay.API.prototype.searchTorrents = function(query,page,onSuccess,onE
       "query" : query,
       "page"  : page,
       "order" : "99",
-    },{
-      "Content-Type" : "application/json"
-    },onSuccess,onError
+    },WebPT.DEFAULT_HTTP_HEADERS,onSuccess,onError
   );
 };
+
+
+WebPT.YTS.API = function(host){
+  this.host = host;
+};
+
+WebPT.YTS.API.prototype.getYTSPage=function(page,onSuccess,onError){
+  Util.http(
+    this.host+"/ws/yts/torrents/"+page,"GET",
+    null,WebPT.DEFAULT_HTTP_HEADERS,onSuccess,onError
+  );
+}

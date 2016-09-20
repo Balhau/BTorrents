@@ -22,12 +22,22 @@ body{
   font-size: 2.5em;
 }
 
+img.thumbnail{
+  width: 40%;
+  height: 40%;
+  text-align: center;
+}
+
 div.table{
   width:100%;
   overflow: auto;
   background: white;
   color: black;
   margin-top: 10px;
+}
+
+.ytsDsc{
+  font-size: 8px;
 }
 
 div.row{
@@ -51,6 +61,14 @@ div.left{
 
 div.right{
 
+}
+
+
+div.ytsInfo{
+  text-align: center;
+  padding: 10%;
+  background: yellowgreen;
+  margin: 5%;
 }
 
 
