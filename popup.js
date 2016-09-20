@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var addTorrent=function(url){
     tClient.addTorrent(url,
-      function(){alert("Added torrent: "+url);},
-      function(){alert("Error while sending torrent");}
+      function(){console.log("Added torrent: "+url);},
+      function(){console.log("Error while sending torrent");}
     )
   };
 
@@ -36,9 +36,21 @@ document.addEventListener('DOMContentLoaded', function() {
     )
   };
 
+  btnYtsPrevious.addEventListener('click',function(){
+    if(ytsCurrPage>1) ytsCurrPage--;
+    loadYTSContent(ytsCurrPage);
+  });
+
+  btnYtsNext.addEventListener('click',function(){
+    ytsCurrPage++;
+    loadYTSContent(ytsCurrPage);
+  });
+
   var toggleYTS = function(){
+    ytsCurrPage=1;
     btnYtsPrevious.disabled = !chkDisplayYTS.checked;
     btnYtsNext.disabled = !chkDisplayYTS.checked;
+
     if(chkDisplayYTS.checked === true){
       loadYTSContent(ytsCurrPage);
     }else{
