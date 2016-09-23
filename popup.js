@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
       renderHtml += "<div class='left ytsInfo'>";
       renderHtml += "<img class='thumbnail' src='"+tinfo.imageURL+"'></img>";
       renderHtml += "<div class='name'>"+tinfo.description+"</div>";
-      renderHtml += "<p class='ytsDsc'>Rotten Tomatoes Critics: "+tinfo.rottenTomatoesCritics+"</p>";
-      renderHtml += "<p class='ytsDsc'>Rotten Tomatoes Audience: "+tinfo.getRottenTomatoesAudience+"</p>";
-      renderHtml += "<p class='ytsDsc'>IMDB: "+tinfo.imdb+"</p>";
+      renderHtml += "<p class='ytsDsc'><a target='_blank' href='"+tinfo.rottenTomatoesCritics.url+"'>"+tinfo.rottenTomatoesCritics.description+":"+tinfo.rottenTomatoesCritics.value+"</a></p>";
+      renderHtml += "<p class='ytsDsc'><a target='_blank' href='"+tinfo.getRottenTomatoesAudience.url+"'>"+tinfo.getRottenTomatoesAudience.description+":"+tinfo.getRottenTomatoesAudience.value+"</a></p>";
+      renderHtml += "<p class='ytsDsc'><a target='_blank' href='"+tinfo.imdb.url+"'>"+tinfo.imdb.description+":"+tinfo.imdb.value+"</a></p>";
       renderHtml += "<p class='ytsDsc'>Likes: "+tinfo.likes+"</p>";
       tinfo.torrentLinks.forEach(function(link){
         renderHtml += "<p class='ytsDsc'><a href='#' data='"+btoa(link.url)+"'>"+link.description+"</a>";
@@ -77,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     divYts.innerHTML=renderHtml;
 
-    addEventToAnchors(divYts);
+    var aLinks = Array.from(divYts.getElementsByTagName("a")).slice(0,3);
+    addEventToAnchors(aLinks);
   };
 
   var renderTorrentResults = function(result,number){
@@ -96,12 +97,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     divResults.innerHTML = renderHtml;
 
-    addEventToAnchors(divResults);
+    addEventToAnchors(divResults.getElementsByTagName("a"));
   };
 
-  var addEventToAnchors=function(parent){
-    var aEl = parent.getElementsByTagName('a');
-    Array.from(aEl).forEach(function(el){
+  var addEventToAnchors=function(anchors){
+    Array.from(anchors).forEach(function(el){
       var data = el.getAttribute("data");
       el.onclick = function(){
         addTorrent(atob(data));
