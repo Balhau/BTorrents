@@ -29,7 +29,7 @@ WebPT.PirateBay.API=function(host){
 
 WebPT.PirateBay.API.prototype.searchTorrents = function(query,page,onSuccess,onError){
   Util.http(
-    this.host+"/ws/piratebay/torrents","PUT",{
+    this.host+"/ws/piratebay/torrents","POST",{
       "query" : query,
       "page"  : page,
       "order" : "99",

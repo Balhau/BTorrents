@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var txtSearch       = document.getElementById('txtSearch');
   var btnSearch       = document.getElementById('btnSearch');
+  var btnSearchNext   = document.getElementById('btnSearchNext')
+  var btnSearchPrev   = document.getElementById('btnSearchPrev')
   var divResults      = document.getElementById('divResults');
   var chkDisplayYTS   = document.getElementById('displayYTS');
   var btnYtsPrevious  = document.getElementById('ytsPrevious');
@@ -10,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var divYts          = document.getElementById('divYts');
 
   var ytsCurrPage     = 1;
+  var searchCurrPage  = 0;
 
   syncLocalData(function(url,user,pass,token){
     tClient = new TransmissionClient(url,user,pass,pass,token);
@@ -33,6 +36,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     )
   };
+
+  btnSearchPrev.addEventListener('click',function(){
+    if(searchCurrPage>0) searchCurrPage--;
+    loadTorrents(txtSearch.value,searchCurrPage);
+  });
+
+  btnSearchNext.addEventListener('click',function(){
+    searchCurrPage++;
+    loadTorrents(txtSearch.value,searchCurrPage);
+  });
 
   btnYtsPrevious.addEventListener('click',function(){
     if(ytsCurrPage>1) ytsCurrPage--;
@@ -77,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     divYts.innerHTML=renderHtml;
 
-    var aLinks = Array.from(divYts.getElementsByTagName("a")).slice(0,3);
+    var aLinks = Array.from(divYts.getElementsByTagName("a")).slice(3);
     addEventToAnchors(aLinks);
   };
 
@@ -86,7 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     result.message.slice(0,number).forEach(function(tinfo){
       renderHtml += "<div class='torrentInfo'>";
-      renderHtml += "<div class='name'>"+tinfo.name+"</div>";
+      renderHtml += "<div class='name'><b>"+tinfo.title+"</b></div>";
+      renderHtml += "<div class='name'>"+tinfo.description+"</div>";
       renderHtml += "<p><a href='#' data='"+btoa(tinfo.magnetLink)+"'>MagnetLink</a></p>";
       renderHtml += "<p><a href='#' data='"+btoa(tinfo.magnetLink)+"'>TorrentLink</a></p>";
       renderHtml += "<p><span>"+tinfo.date+"</span></p>";
@@ -117,8 +131,15 @@ document.addEventListener('DOMContentLoaded', function() {
       divResults.innerHTML="Error while retrieving data"
   };
 
-  btnSearch.addEventListener('click',function(){
+  var loadTorrents=function(query,page){
+    divResults.innerHTML="<img class='loading' src='loading.gif'></img>";
+    divResults.style.backgroundColor = window.getComputedStyle(document.body).backgroundColor;
     var pb=new WebPT.PirateBay.API(service_url);
-    pb.searchTorrents(txtSearch.value,0,render100,renderError);
+    pb.searchTorrents(query,page,render100,renderError);
+  }
+
+  btnSearch.addEventListener('click',function(){
+    searchCurrPage=0;
+    loadTorrents(txtSearch.value,searchCurrPage);
   });
 });

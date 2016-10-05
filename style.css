@@ -12,6 +12,16 @@ button.action{
   padding: 5px;
 }
 
+.name{
+  margin-bottom: 5%;
+}
+
+.loading{
+  width: 25%;
+  height: 25%;
+  margin-left: 35%;
+}
+
 body{
   background: #663399;
   color: white;
