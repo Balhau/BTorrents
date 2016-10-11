@@ -22,6 +22,11 @@
       "css" : [],
       "js" : ["jquery.js","utils.js","transmission.js","shared.js","yts-injector.js"],
       "matches" : ["https://yts.ag/movie/*"]
+    },
+    {
+      "css" : [],
+      "js" : ["facebook-injector.js"],
+      "matches" : ["https://www.facebook.com/*"]
     }
   ],
   "permissions": [
@@ -29,6 +34,7 @@
     "https://ajax.googleapis.com/",
     "https://webpt.balhau.net/",
     "https://transmission.balhau.net/",
+    "https://www.facebook.com/",
     "storage"
   ]
 }
