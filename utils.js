@@ -16,3 +16,13 @@ Util.call=function(f,args){
     f(args);
   }
 };
+
+if(Array.from == undefined){
+  Array.from=function(a){
+    var out=[];
+    for(var i=0;i<a.length;i++){
+       out[i]=a[i];
+    }
+    return out;
+  }
+}

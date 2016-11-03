@@ -34,7 +34,11 @@ var decorateMovies = function() {
 
   for(var i=0;i<embeds.length;i++){
     console.log(embeds[i]);
-    getSpanLike(embeds[i]);
+    try{
+      getSpanLike(embeds[i]);
+    }catch(err){
+      console.log("error while trying to decorate movie"+err);
+    }
   }
 };
 
